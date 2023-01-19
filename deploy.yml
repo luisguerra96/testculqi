@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testculqi-kube-deploy
+  labels:
+    name: testculqi-kube-deploy
+    app: testculqi-kube-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: testculqi-kube-pod
+      app: testculqi-kube-app
+  template:
+    metadata:
+      name: testculqi-kube-pod
+      labels:
+        name: testculqi-kube-pod
+        app: testculqi-kube-app
+    spec:
+      containers:
+        - name: testculqi-kube-container
+          image: "855742204602.dkr.ecr.us-east1.amazonaws.com/testculqi:latest"
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 128Mi
+              cpu: "0.2"
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5
